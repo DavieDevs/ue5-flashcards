@@ -628,6 +628,54 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l27",
+    section: 2,
+    lesson: 27,
+    title: "Comments",
+    description:
+      "Single-line and multi-line comments, why comments are used, disabling code",
+    cards: [
+      {
+        id: "s2l27-1",
+        front: "What is a comment in C++?",
+        back: "A piece of code that is completely ignored by the compiler. It exists only for humans to read — it has zero effect on how the program runs.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l27-2",
+        front: "How do you write a single-line comment in C++?",
+        back: "Use two forward slashes //. Everything after them on that line is ignored.\n\n// This is a comment\nint Health = 100; // this is also a comment",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l27-3",
+        front: "How do you write a multi-line comment in C++?",
+        back: "Use /* to open and */ to close. Everything between them is ignored, across as many lines as needed.\n\n/* \n  This is a\n  multi-line comment\n*/",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l27-4",
+        front: "What are the two main uses of comments in C++?",
+        back: "1. Documentation — explain what your code does so you (or others) can understand it later\n2. Disabling code — temporarily comment out a line to test something without deleting it",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l27-5",
+        front:
+          "Why is commenting your code especially important as a beginner?",
+        back: "Because you will forget what your code does. Leaving notes in plain English next to complex logic means you can re-read your own code days later and still understand it without re-tracing every step.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l27-6",
+        front:
+          "How can you use comments to temporarily disable a line of code?",
+        back: "Add // before the line to turn it into a comment. The compiler ignores it, so it won't run — but it's still there to uncomment later.\n\n// SetActorLocation(MyVector); // disabled for testing",
+        tag: "Fundamentals",
+      },
+    ],
+  },
 
   // Add future lessons here — same structure as above.
   // Example:
