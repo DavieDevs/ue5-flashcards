@@ -170,6 +170,80 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l20",
+    section: 2,
+    lesson: 20,
+    title: "Logging Variables",
+    description:
+      "Format specifiers, printing ints/floats/strings in UE_LOG, function arguments",
+    cards: [
+      {
+        id: "s2l20-1",
+        front:
+          "What is a format specifier in UE_LOG, and what symbol introduces one?",
+        back: 'A format specifier is a placeholder inside a log message that gets replaced by a variable\'s value at runtime. It starts with a % sign.\n\nExample: UE_LOG(LogTemp, Display, TEXT("Apples: %d"), NumberOfApples);',
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-2",
+        front:
+          "What are the three most common UE_LOG format specifiers and what type does each handle?",
+        back: "%d — integer (int)\n%f — floating point (float)\n%s — string (FString)\n\nThere are others (e.g. %c for char) but these three are used most often.",
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-3",
+        front: "How do you log an integer variable in UE5?",
+        back: 'int NumberOfApples = 10;\nUE_LOG(LogTemp, Display, TEXT("Apples: %d"), NumberOfApples);\n\nThe %d is replaced by the value of NumberOfApples at runtime.',
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-4",
+        front: "How do you log a float variable in UE5?",
+        back: 'float MyHeight = 182.5f;\nUE_LOG(LogTemp, Display, TEXT("Height: %f"), MyHeight);\n\nUse %f for floats. Note: this prints extra trailing zeros by default.',
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-5",
+        front:
+          "How do you log an FString variable in UE5, and what is special about it?",
+        back: 'FString MyName = "Kaan";\nUE_LOG(LogTemp, Display, TEXT("Name: %s"), *MyName);\n\nYou must add an asterisk * before the FString variable. This converts it to the format UE_LOG requires. Without it, it won\'t compile.',
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-6",
+        front: "What does the asterisk * do before an FString in UE_LOG?",
+        back: 'It dereferences the FString into a raw character pointer (TCHAR*) that UE_LOG\'s %s format specifier requires. Without it UE_LOG cannot read the string.\n\nUE_LOG(LogTemp, Display, TEXT("%s"), *MyName);',
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-7",
+        front: "How do you log multiple variables in a single UE_LOG message?",
+        back: 'Add multiple format specifiers in the text and provide matching variables after — order matters.\n\nUE_LOG(LogTemp, Display, TEXT("%d and %d"), NumberOfApples, NumberOfOranges);\n\nThe first %d maps to the first variable, second %d to the second.',
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-8",
+        front:
+          "What are the three log levels in UE_LOG and what color does each display?",
+        back: 'Display — standard white message\nWarning — shown in yellow\nError — shown in red\n\nUsage: UE_LOG(LogTemp, Warning, TEXT("Something\'s wrong!"));',
+        tag: "Logging",
+      },
+      {
+        id: "s2l20-9",
+        front: "What are 'arguments' in a function call?",
+        back: "Arguments are the values you pass into a function so it can operate. They go inside the parentheses, separated by commas.\n\nIn UE_LOG the arguments are: log category, log level, and the text message (plus any variables).",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l20-10",
+        front: "Is UE_LOG actually a function?",
+        back: "No — UE_LOG is a macro, not a function. TEXT() is also a macro. However they look and behave like functions at this stage, so they can be treated the same way conceptually for now.",
+        tag: "Logging",
+      },
+    ],
+  },
   // Add future lessons here — same structure as above.
   // Example:
   // {
