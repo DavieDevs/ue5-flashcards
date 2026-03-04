@@ -25,3 +25,61 @@ button {
 pre, code {
   font-family: 'DM Mono', 'Fira Code', monospace;
 }
+
+/* --- Responsive layout --- */
+
+.topbar        { padding: 0 32px; }
+.main-content  { padding: 48px 24px; }
+.hero-h1       { font-size: 36px; font-weight: 700; color: #f0f6fc; line-height: 1.2; margin-bottom: 12px; }
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.section-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+}
+
+.study-card { padding: 28px 32px; }
+
+@media (max-width: 640px) {
+  .topbar       { padding: 0 16px; }
+  .main-content { padding: 24px 16px; }
+  .hero-h1      { font-size: 26px; }
+
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    gap: 8px;
+  }
+  .section-tabs::-webkit-scrollbar { display: none; }
+
+  .bottom-bar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    align-items: stretch;
+  }
+  .bottom-bar-start-btn { width: 100%; }
+
+  .study-card { padding: 20px 16px; }
+}

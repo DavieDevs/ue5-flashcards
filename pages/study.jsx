@@ -461,6 +461,7 @@ export default function Study() {
 
       {/* Card */}
       <div
+        className="study-card"
         onClick={() => setFlipped((f) => !f)}
         style={{
           width: "100%",
@@ -469,7 +470,6 @@ export default function Study() {
           background: "#0d1117",
           border: `1px solid ${flipped ? tagColor + "55" : "#161b22"}`,
           borderRadius: "16px",
-          padding: "28px 32px",
           cursor: "pointer",
           display: "flex",
           flexDirection: "column",

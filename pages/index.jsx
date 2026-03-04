@@ -56,9 +56,8 @@ export default function Home() {
   return (
     <div style={{ minHeight: '100vh', background: '#060810' }}>
       {/* Top bar */}
-      <div style={{
+      <div className="topbar" style={{
         borderBottom: '1px solid #161b22',
-        padding: '0 32px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -82,13 +81,13 @@ export default function Home() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 24px' }}>
+      <div className="main-content" style={{ maxWidth: '900px', margin: '0 auto' }}>
         {/* Hero */}
         <div style={{ marginBottom: '48px' }}>
           <div style={{ fontSize: '12px', color: '#484f58', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '12px' }}>
             Unreal Engine 5 C++ Game Development
           </div>
-          <h1 style={{ fontSize: '36px', fontWeight: 700, color: '#f0f6fc', lineHeight: 1.2, marginBottom: '12px' }}>
+          <h1 className="hero-h1">
             Study Flashcards
           </h1>
           <p style={{ color: '#8b949e', fontSize: '15px', maxWidth: '480px', lineHeight: 1.6 }}>
@@ -96,9 +95,9 @@ export default function Home() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '24px', alignItems: 'start' }}>
+        <div className="main-grid">
           {/* Section tabs */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div className="section-tabs">
             <div style={{ fontSize: '11px', color: '#484f58', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '8px', paddingLeft: '8px' }}>
               Sections
             </div>
@@ -120,7 +119,8 @@ export default function Home() {
                     gap: '10px',
                     textAlign: 'left',
                     color: activeSection === s ? '#f0f6fc' : '#484f58',
-                    transition: 'all 0.15s'
+                    transition: 'all 0.15s',
+                    flexShrink: 0
                   }}
                 >
                   <div style={{
@@ -235,20 +235,17 @@ export default function Home() {
 
       {/* Sticky start bar */}
       {totalSelected > 0 && (
-        <div style={{
+        <div className="bottom-bar" style={{
           position: 'fixed', bottom: 0, left: 0, right: 0,
           background: '#0d1117',
           borderTop: '1px solid #21262d',
-          padding: '16px 32px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
         }}>
           <div>
             <span style={{ color: '#f0f6fc', fontWeight: 600 }}>{totalSelected} lesson{totalSelected !== 1 ? 's' : ''} selected</span>
             <span style={{ color: '#484f58', marginLeft: '8px', fontSize: '14px' }}>· {totalCards} cards</span>
           </div>
           <button
+            className="bottom-bar-start-btn"
             onClick={startStudy}
             style={{
               background: 'linear-gradient(135deg, #00d4ff, #a855f7)',
