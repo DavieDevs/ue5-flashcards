@@ -676,6 +676,55 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l28",
+    section: 2,
+    lesson: 28,
+    title: "GetActorLocation",
+    description:
+      "GetActorLocation, return values, get vs set functions, moving from current position",
+    cards: [
+      {
+        id: "s2l28-1",
+        front: "What does GetActorLocation() do?",
+        back: "It returns the current world position of an Actor as an FVector.\n\nFVector CurrentLocation = GetActorLocation();\n\nUnlike SetActorLocation, it takes no arguments — it just reads and returns the current position.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l28-2",
+        front: "What is a return value?",
+        back: "A value that a function sends back to the caller when it finishes. You capture it by assigning the function call to a variable.\n\nFVector Location = GetActorLocation();\n// Location now holds whatever the function returned",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l28-3",
+        front:
+          "What is the naming convention difference between 'Get' and 'Set' functions in UE5?",
+        back: "Get functions return a value — they read data.\nSet functions accept a value — they write data.\n\nGetActorLocation() — returns the current location\nSetActorLocation(FVector) — sets a new location\n\nThis is a common pattern throughout the entire UE5 API.",
+        tag: "Conventions",
+      },
+      {
+        id: "s2l28-4",
+        front:
+          "Why is moving from GetActorLocation() better than using a hardcoded FVector in Tick?",
+        back: "Because it makes the platform move from wherever it currently sits in the level, not from a hardcoded position. This makes level design much easier — you place the platform where you want and it moves from there.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l28-5",
+        front:
+          "What does this Tick code do?\n\nFVector CurrentLocation = GetActorLocation();\nCurrentLocation.X = CurrentLocation.X + 1.f;\nSetActorLocation(CurrentLocation);",
+        back: "Each frame:\n1. Gets the Actor's current world position\n2. Increases the X value by 1\n3. Sets the Actor to that new position\n\nResult: the Actor moves continuously along the X axis, starting from wherever it was placed in the level.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l28-6",
+        front: "Do Get functions typically take arguments? Why or why not?",
+        back: "Usually not. A Get function's purpose is to return data that already exists — it doesn't need input to do that. The return value IS the point.\n\nGetActorLocation() // no arguments needed",
+        tag: "Fundamentals",
+      },
+    ],
+  },
 
   // Add future lessons here — same structure as above.
   // Example:
