@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { lessons, getSections, getLessonsForSection } from '../data/cards';
+import { supabase } from '../lib/supabaseClient';
 
 const tagColors = {
   Architecture: '#00d4ff',
@@ -76,9 +77,12 @@ export default function Home() {
           }}>U</div>
           <span style={{ fontWeight: 700, fontSize: '15px', color: '#f0f6fc' }}>UE5 Flashcards</span>
         </div>
-        <div style={{ fontSize: '12px', color: '#484f58' }}>
-          GameDev.tv · Kaan Alpar
-        </div>
+        <button
+          onClick={() => supabase.auth.signOut()}
+          style={{ fontSize: '12px', color: '#484f58', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
+        >
+          Sign out
+        </button>
       </div>
 
       <div className="main-content" style={{ maxWidth: '900px', margin: '0 auto' }}>
