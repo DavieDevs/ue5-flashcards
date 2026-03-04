@@ -244,6 +244,63 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l21",
+    section: 2,
+    lesson: 21,
+    title: "Number Operations",
+    description: "Arithmetic operators, expressions, integer vs float math, negative numbers",
+    cards: [
+      {
+        id: "s2l21-1",
+        front: "What are the four basic arithmetic operators in C++?",
+        back: "+ addition\n- subtraction\n* multiplication\n/ division\n\nExample:\nint Result = 10 + 5;  // 15\nint Result = 10 - 5;  // 5\nint Result = 10 * 5;  // 50\nint Result = 10 / 5;  // 2",
+        tag: "Fundamentals"
+      },
+      {
+        id: "s2l21-2",
+        front: "What is an expression in C++?",
+        back: "An operator and its operands that evaluate to a single value.\n\nExample: 10 / 5 is an expression that evaluates to 2. That result can then be assigned to a variable.\n\nint MyValue = 10 / 5; // MyValue = 2",
+        tag: "Fundamentals"
+      },
+      {
+        id: "s2l21-3",
+        front: "Can you use variables inside arithmetic expressions?",
+        back: "Yes. Variables can be used with operators just like raw numbers, and you can mix both.\n\nint MyValue = -5;\nint MyOther = -8;\nint Result = MyValue * MyOther; // 40",
+        tag: "Fundamentals"
+      },
+      {
+        id: "s2l21-4",
+        front: "How do you make a number negative in C++?",
+        back: "Place a minus sign directly in front of it.\n\nint MyValue = -5;\nfloat MyFloat = -3.14f;\n\nThis works with both literals and as part of expressions.",
+        tag: "Fundamentals"
+      },
+      {
+        id: "s2l21-5",
+        front: "What happens when you multiply two negative integers?",
+        back: "The result is positive — same rule as in math.\n\nint A = -5;\nint B = -8;\nint Result = A * B; // 40 (positive)",
+        tag: "Fundamentals"
+      },
+      {
+        id: "s2l21-6",
+        front: "What is the critical difference between integer division and float division?",
+        back: "Integer division truncates the decimal — you lose the fractional part.\nFloat division keeps the decimal.\n\nint:   10 / 4  = 2   (not 2.5)\nfloat: 10.0f / 4.0f = 2.5f",
+        tag: "Fundamentals"
+      },
+      {
+        id: "s2l21-7",
+        front: "Why do you need to write 12.0f instead of just 12 when doing float math?",
+        back: "Without the .0f, C++ treats the number as an integer and performs integer math — losing the decimal. Adding .0f tells the compiler it's a float.\n\nfloat Result = 12.0f / 5.0f; // 2.4\nfloat Result = 12 / 5;       // 2 (integer math!)",
+        tag: "Fundamentals"
+      },
+      {
+        id: "s2l21-8",
+        front: "What format specifier do you use to log the result of a float operation?",
+        back: "Use %f for floats.\n\nfloat MyCalc = 12.0f / 5.0f;\nUE_LOG(LogTemp, Display, TEXT(\"Result: %f\"), MyCalc);\n// prints: Result: 2.400000",
+        tag: "Logging"
+      }
+    ]
+  },
   // Add future lessons here — same structure as above.
   // Example:
   // {
