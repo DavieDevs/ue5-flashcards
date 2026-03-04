@@ -798,6 +798,69 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l30",
+    section: 2,
+    lesson: 30,
+    title: "Velocity Vectors",
+    description:
+      "Using FVector for velocity, vector-to-vector addition, vector-float multiplication",
+    cards: [
+      {
+        id: "s2l30-1",
+        front:
+          "What is a platform velocity vector and why is it better than a single float for movement?",
+        back: "An `FVector` that controls both speed AND direction on all three axes at once.\n\nA single float only controls one axis. A velocity vector lets you set X, Y, and Z movement from the editor — no code changes needed to change direction.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l30-2",
+        front:
+          "How do you declare a PlatformVelocity member variable in the header?",
+        back: "```\nUPROPERTY(EditAnywhere)\nFVector PlatformVelocity = FVector(0.f, 0.f, 0.f);\n```\n\nDefault is zero — the platform won't move until you set values in the editor.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l30-3",
+        front: "How does adding two FVectors work?",
+        back: "Matching properties are added together — X+X, Y+Y, Z+Z. The result is a new FVector.\n\n```\nFVector A = FVector(1, 2, 3);\nFVector B = FVector(4, 5, 6);\nFVector Result = A + B;\n// Result = FVector(5, 7, 9)\n```",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l30-4",
+        front: "How does multiplying an FVector by a float work?",
+        back: "Every property of the vector is multiplied by the float. The result is a new FVector.\n\n```\nFVector MyVector = FVector(1, 2, 3);\nfloat SomeFloat = 10.f;\nFVector Result = MyVector * SomeFloat;\n// Result = FVector(10, 20, 30)\n```",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l30-5",
+        front:
+          "What does this Tick code do?\n\nFVector CurrentLocation = GetActorLocation();\nCurrentLocation += PlatformVelocity * DeltaTime;\nSetActorLocation(CurrentLocation);",
+        back: "Each frame:\n1. Gets the current position\n2. Multiplies `PlatformVelocity` by `DeltaTime` (frame-rate independent scaling)\n3. Adds the result to the current location\n4. Sets the new position\n\nThis moves the Actor along all three axes simultaneously based on the velocity vector.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l30-6",
+        front:
+          "How do you control direction using the PlatformVelocity vector in the editor?",
+        back: "Set positive or negative values on each axis:\n\n• X positive → moves forward, X negative → moves backward\n• Y positive → moves right, Y negative → moves left\n• Z positive → moves up, Z negative → moves down\n\nExample: `(-100, 0, 10)` moves backward and slowly upward.",
+        tag: "Editor",
+      },
+      {
+        id: "s2l30-7",
+        front: "What is the result type when you multiply a vector by a float?",
+        back: "An `FVector` — not a float. Even though a vector and a float are different types, multiplying them produces a new vector where each property has been multiplied by the float.\n\n```\nFVector Result = PlatformVelocity * DeltaTime; // FVector\n```",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l30-8",
+        front:
+          "What are the arithmetic operators that work between two FVectors?",
+        back: "All four basic operators work between two FVectors, always operating on matching properties:\n\n`+` → adds X+X, Y+Y, Z+Z\n`-` → subtracts X-X, Y-Y, Z-Z\n`*` → multiplies X*X, Y*Y, Z*Z\n`/` → divides X/X, Y/Y, Z/Z\n\nThe result is always a new FVector.",
+        tag: "Fundamentals",
+      },
+    ],
+  },
 
   // Add future lessons here — same structure as above.
 ];
