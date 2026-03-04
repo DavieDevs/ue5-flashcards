@@ -734,6 +734,70 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l29",
+    section: 2,
+    lesson: 29,
+    title: "Delta Time",
+    description:
+      "Frame rate independence, DeltaTime variable, why speed differs across computers",
+    cards: [
+      {
+        id: "s2l29-1",
+        front:
+          "What is the 'speed problem' when moving things inside Tick without DeltaTime?",
+        back: "A fast computer running at 100 FPS moves the platform 100 units/sec.\nA slow computer at 30 FPS only moves it 30 units/sec.\n\nThe game behaves differently on different machines — which is a serious bug.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l29-2",
+        front: "What is DeltaTime?",
+        back: "`DeltaTime` is the time in seconds it took the CPU to compute the last frame.\n\nSlow computer (10 FPS) → DeltaTime = 0.1\nFast computer (100 FPS) → DeltaTime = 0.01\n\nThe slower the machine, the larger the DeltaTime.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l29-3",
+        front: "How do you access DeltaTime in C++?",
+        back: "It's passed as an argument to the `Tick` function automatically by UE5. You don't calculate it yourself — just use it.\n\n```\nvoid AMovingPlatform::Tick(float DeltaTime)\n{\n    // DeltaTime is ready to use here\n}\n```",
+        tag: "Lifecycle",
+      },
+      {
+        id: "s2l29-4",
+        front:
+          "How do you make movement frame rate independent using DeltaTime?",
+        back: "Multiply your movement value by `DeltaTime`.\n\n```\n// Frame rate DEPENDENT (bad)\nCurrentLocation.X = CurrentLocation.X + 1.f;\n\n// Frame rate INDEPENDENT (good)\nCurrentLocation.X = CurrentLocation.X + (100.f * DeltaTime);\n```",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l29-5",
+        front:
+          "Why does multiplying by DeltaTime make speed consistent across machines?",
+        back: "Slow machine: DeltaTime is large → compensates for fewer frames\nFast machine: DeltaTime is small → compensates for more frames\n\nExample at 100 units/sec:\n10 FPS:  100 × 0.1  = 10 units per frame × 10 frames  = 100 units/sec\n100 FPS: 100 × 0.01 = 1 unit per frame  × 100 frames = 100 units/sec",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l29-6",
+        front:
+          "After introducing DeltaTime, how should you think about the movement value?",
+        back: "Think in units per second, not units per frame.\n\n```\nCurrentLocation.X += 100.f * DeltaTime;\n// means: move 100 cm every second\n```\n\nThis makes tuning movement intuitive and machine-independent.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l29-7",
+        front:
+          "Why do parentheses help when using DeltaTime in a movement expression?",
+        back: "They make the intent clear — showing that the speed value and DeltaTime are multiplied together first before being added to the position.\n\n```\nCurrentLocation.X = CurrentLocation.X + (100.f * DeltaTime);\n```",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l29-8",
+        front:
+          "Why might you turn the movement speed value into a UPROPERTY member variable?",
+        back: "So designers can tune the speed directly in the editor without touching or recompiling code.\n\n```\nUPROPERTY(EditAnywhere)\nfloat Speed = 100.f;\n\n// In Tick:\nCurrentLocation.X += Speed * DeltaTime;\n```",
+        tag: "Architecture",
+      },
+    ],
+  },
 
   // Add future lessons here — same structure as above.
 ];
