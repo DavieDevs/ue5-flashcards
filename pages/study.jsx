@@ -248,7 +248,8 @@ export default function Study() {
             top: "24px",
             left: "24px",
             fontSize: "13px",
-            color: "#484f58",
+            color: "#8b949e",
+            fontWeight: 600,
           }}
         >
           ← Back to lessons
@@ -404,7 +405,7 @@ export default function Study() {
           justifyContent: "space-between",
         }}
       >
-        <Link href="/" style={{ fontSize: "13px", color: "#484f58" }}>
+        <Link href="/" style={{ fontSize: "13px", color: "#8b949e", fontWeight: 600 }}>
           ← lessons
         </Link>
         {mode === "missed" && (
