@@ -498,6 +498,70 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l25",
+    section: 2,
+    lesson: 25,
+    title: "SetActorLocation",
+    description:
+      "Moving actors with SetActorLocation, root components, using FVector member variables from the editor",
+    cards: [
+      {
+        id: "s2l25-1",
+        front:
+          "What function do you call to move an Actor to a specific position in C++?",
+        back: "SetActorLocation(FVector NewLocation);\n\nExample:\nFVector TargetLocation = FVector(1110.f, -610.f, 440.f);\nSetActorLocation(TargetLocation);\n\nThis instantly moves the Actor to the given world position.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l25-2",
+        front: "What argument does SetActorLocation require?",
+        back: "An FVector representing the new world position (X, Y, Z) to move the Actor to.\n\nSetActorLocation(FVector(100.f, 200.f, 300.f));",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l25-3",
+        front:
+          "Why does an Actor need a component before you can set its location?",
+        back: "An Actor's position in the world is anchored by its Root Component. Without any component, there is no Root Component and therefore no transform — SetActorLocation has nothing to move.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l25-4",
+        front: "What is the Root Component?",
+        back: "The first component added to an Actor becomes its Root Component. It defines the Actor's position, rotation, and scale in the world. All other components are positioned relative to it.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l25-5",
+        front:
+          "If SetActorLocation is called in BeginPlay, when does the Actor move?",
+        back: "Instantly at the start of the game. BeginPlay runs once when the game begins, so the Actor is teleported to the new location the moment play starts.",
+        tag: "Lifecycle",
+      },
+      {
+        id: "s2l25-6",
+        front:
+          "What is the advantage of using a UPROPERTY FVector member variable with SetActorLocation instead of a hardcoded FVector?",
+        back: "You can set the destination directly in the editor Details panel without touching or recompiling code. This lets designers tune values without needing to go back to Visual Studio.\n\nUPROPERTY(EditAnywhere)\nFVector MyVector = FVector(0,0,0);\n// then in BeginPlay:\nSetActorLocation(MyVector);",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l25-7",
+        front:
+          "How can you quickly get an Actor's exact world location from the UE5 editor to use in code?",
+        back: "Position the Actor where you want it in the viewport, then right-click the Location field in the Details panel and select Copy. You can paste those XYZ values directly into your FVector constructor.",
+        tag: "Editor",
+      },
+      {
+        id: "s2l25-8",
+        front:
+          "Can you paste a copied location value directly into an FVector UPROPERTY in the Details panel?",
+        back: "Yes. Right-click the FVector UPROPERTY field in the Details panel and select Paste. This transfers the copied XYZ location values directly into the member variable without touching code.",
+        tag: "Editor",
+      },
+    ],
+  },
 
   // Add future lessons here — same structure as above.
   // Example:
