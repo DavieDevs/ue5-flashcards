@@ -355,7 +355,82 @@ export const lessons = [
       },
     ],
   },
-  
+  {
+    id: "s2-l23",
+    section: 2,
+    lesson: 23,
+    title: "Member Variables",
+    description:
+      "Local vs member variables, declaring in header, UPROPERTY, EditAnywhere vs VisibleAnywhere",
+    cards: [
+      {
+        id: "s2l23-1",
+        front: "What is a local variable and what are its two key limitations?",
+        back: "A local variable is declared inside a function and only exists within that function.\n\nLimitations:\n1. Only accessible inside the function it was created in\n2. Gets deleted when the function ends\n\nThis makes them a poor choice for storing data long term.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l23-2",
+        front:
+          "What is a member variable and how does it differ from a local variable?",
+        back: "A member variable belongs to a class, not a function. It is declared in the header file (.h).\n\nDifferences:\n• Accessible in ALL functions of the class\n• Persists for the lifetime of the object — not deleted at the end of a function",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l23-3",
+        front: "Where do you declare a member variable in UE5 C++?",
+        back: "Inside the class declaration in the header file (.h), not inside any function.\n\nExample in MovingPlatform.h:\nUPROPERTY(EditAnywhere)\nfloat MemberFloat = 10.f;",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l23-4",
+        front: "How do you give a member variable a default value in UE5?",
+        back: "Assign it directly in the header file at the point of declaration.\n\nfloat MemberFloat = 10.f;\n\nThis value is used at the start of the game unless overridden in the editor.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l23-5",
+        front: "What does UPROPERTY() do for a member variable?",
+        back: "It registers the variable with UE5's reflection system, making it visible to the engine, editor, and Blueprint system.\n\nWithout UPROPERTY(), the editor has no knowledge the variable exists.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l23-6",
+        front:
+          "What is the difference between EditAnywhere and VisibleAnywhere in UPROPERTY?",
+        back: "EditAnywhere — variable is visible AND editable in the Details panel\nVisibleAnywhere — variable is visible in the Details panel but CANNOT be edited\n\nUPROPERTY(EditAnywhere)  // can change the value\nUPROPERTY(VisibleAnywhere) // read-only in editor",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l23-7",
+        front: "Do you put a semicolon after UPROPERTY()?",
+        back: "No. UPROPERTY() and the variable declaration below it are treated as one statement. Only the variable line itself ends with a semicolon.\n\nUPROPERTY(EditAnywhere)  // no semicolon here\nfloat MemberFloat = 10.f; // semicolon here",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l23-8",
+        front:
+          "If you change a member variable's value in the Details panel, what happens to the default value?",
+        back: "The Details panel value overrides the default. When the game runs, the variable will use the editor value, not the code default.\n\nExample: default is 10.f in code, but if you set it to 20 in the editor, it will be 20 at runtime.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l23-9",
+        front:
+          "When should you recompile from Visual Studio instead of using Live Coding?",
+        back: "Whenever you make changes to a header file (.h). Using Live Coding for header changes can produce unpredictable results, and any editor values you entered may be lost when you reopen the project.",
+        tag: "Editor",
+      },
+      {
+        id: "s2l23-10",
+        front:
+          "Why are member variables better than local variables for game data like health or speed?",
+        back: "Because game data needs to persist across multiple function calls and frames. A local variable in BeginPlay is gone the moment BeginPlay finishes. A member variable survives for the lifetime of the Actor and is accessible from any function including Tick.",
+        tag: "Architecture",
+      },
+    ],
+  },
+
   // Add future lessons here — same structure as above.
   // Example:
   // {
