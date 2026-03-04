@@ -562,6 +562,72 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l26",
+    section: 2,
+    lesson: 26,
+    title: "The Tick Function",
+    description:
+      "Game loop, frames, FPS, Tick vs BeginPlay, moving actors over time",
+    cards: [
+      {
+        id: "s2l26-1",
+        front: "What is the game loop?",
+        back: "A continuously repeating cycle that keeps the game running. Each cycle has three steps:\n1. Get input (keyboard, mouse, controller)\n2. Update game state (variables, functions, logic)\n3. Render graphics to screen\n\nThis repeats over and over for the entire duration of the game.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l26-2",
+        front: "What is a frame in the context of a game loop?",
+        back: "One complete cycle of the game loop — input, update, render. Think of it like one page in a flipbook. The game runs many frames per second to create the illusion of smooth motion.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l26-3",
+        front: "What is FPS and what determines it?",
+        back: "FPS stands for Frames Per Second — how many times the game loop completes in one second. It is determined by the speed of your CPU and GPU. Common targets are 30, 60, or higher.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l26-4",
+        front: "What is the Tick function and when is it called?",
+        back: "Tick is a special UE5 function that is called every single frame while the game is running. If your game runs at 60 FPS, Tick is called 60 times per second — continuously until the Actor is destroyed or the game ends.",
+        tag: "Lifecycle",
+      },
+      {
+        id: "s2l26-5",
+        front: "What is the key difference between BeginPlay and Tick?",
+        back: "BeginPlay is called ONCE when the Actor enters the game.\nTick is called EVERY FRAME for the lifetime of the Actor.\n\nUse BeginPlay for one-time setup. Use Tick for anything that needs to happen continuously over time.",
+        tag: "Lifecycle",
+      },
+      {
+        id: "s2l26-6",
+        front: "Why is Tick the right place to make things move continuously?",
+        back: "Because Tick runs every frame, any changes made inside it are applied repeatedly. Incrementing a position value in Tick causes smooth continuous movement rather than a one-time jump.",
+        tag: "Lifecycle",
+      },
+      {
+        id: "s2l26-7",
+        front: "How do you move an Actor upward a little each frame in Tick?",
+        back: "Increment the Z value of your position vector and call SetActorLocation each frame.\n\nvoid AMovingPlatform::Tick(float DeltaTime) {\n    Super::Tick(DeltaTime);\n    MyVector.Z = MyVector.Z + 1.f;\n    SetActorLocation(MyVector);\n}",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l26-8",
+        front:
+          "Why isn't calling SetActorLocation with the same vector every frame enough to make something move?",
+        back: "Because you'd be setting the Actor to the exact same position every frame — nothing changes. You need to modify the vector's values each frame before calling SetActorLocation so the position actually changes.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l26-9",
+        front:
+          "What does this line do inside Tick?\n\nMyVector.Z = MyVector.Z + 1.f;",
+        back: "It reads the current Z value, adds 1 to it, and stores the result back into MyVector.Z. Each frame this runs, Z increases by 1 — causing the Actor to move upward steadily over time.",
+        tag: "Fundamentals",
+      },
+    ],
+  },
 
   // Add future lessons here — same structure as above.
   // Example:
