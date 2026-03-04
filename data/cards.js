@@ -430,6 +430,74 @@ export const lessons = [
       },
     ],
   },
+  {
+    id: "s2-l24",
+    section: 2,
+    lesson: 24,
+    title: "Structs",
+    description:
+      "What structs are, FVector, dot operator, constructors, member vs local struct variables",
+    cards: [
+      {
+        id: "s2l24-1",
+        front: "What is a struct in C++?",
+        back: "A struct is a group of variables packaged together under one name. It acts like a custom data type that bundles related data.\n\nExample: FVector bundles three floats — X, Y, and Z — into one named type.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l24-2",
+        front: "What is FVector and what does it store?",
+        back: "FVector is a struct defined by Unreal Engine that stores three floats: X, Y, and Z. It is used to represent 3D positions, directions, and scales throughout the engine.\n\nActor location, rotation, and scale are all FVectors under the hood.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l24-3",
+        front: "How do you create an FVector variable and assign values to it?",
+        back: "Use the FVector constructor with X, Y, Z values in parentheses.\n\nFVector TestVector = FVector(11.2f, 3.4f, 7.6f);\n\nThe constructor creates the struct with those values and assigns it to the variable.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l24-4",
+        front: "What is the dot operator and how is it used with structs?",
+        back: "The dot operator (.) lets you access or modify individual variables inside a struct.\n\nFVector TestVector = FVector(11.2f, 3.4f, 7.6f);\nTestVector.X = 10.4f; // access and reassign X\nfloat Z = TestVector.Z; // read Z",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l24-5",
+        front: "What is a constructor?",
+        back: "A special function that creates and initializes an object or struct. It has the same name as the type and is called with parentheses.\n\nFVector(11.2f, 3.4f, 7.6f)\n\nThe arguments set the initial values of the struct's internal variables.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l24-6",
+        front:
+          "How do you declare an FVector as a UPROPERTY member variable with a default value?",
+        back: "In the header file (.h):\n\nUPROPERTY(EditAnywhere)\nFVector MyVector = FVector(11.2f, 3.4f, 7.6f);\n\nThis registers it with UE5, shows it in the Details panel, and sets its starting values.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l24-7",
+        front:
+          "Why are structs like FVector important in UE5 game development?",
+        back: "Because location, rotation, and scale of every Actor are FVectors. To move, rotate, or scale anything in the world from C++, you need to work with FVector structs.",
+        tag: "Architecture",
+      },
+      {
+        id: "s2l24-8",
+        front:
+          "Can you reassign individual properties of a struct after it's been created?",
+        back: "Yes. Use the dot operator to access and reassign any property at any time.\n\nFVector TestVector = FVector(11.2f, 3.4f, 7.6f);\nTestVector.Z = 2.5f; // Z is now 2.5, X and Y unchanged",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l24-9",
+        front:
+          "What is the difference between a struct declaration and a struct variable?",
+        back: "A declaration is the blueprint — it defines what the struct contains (like a recipe).\nA variable is an actual instance created from that blueprint.\n\nFVector is the declaration (defined by UE5).\nFVector MyVector = FVector(...) is the variable — a real usable instance.",
+        tag: "Fundamentals",
+      },
+    ],
+  },
 
   // Add future lessons here — same structure as above.
   // Example:
