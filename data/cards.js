@@ -249,58 +249,113 @@ export const lessons = [
     section: 2,
     lesson: 21,
     title: "Number Operations",
-    description: "Arithmetic operators, expressions, integer vs float math, negative numbers",
+    description:
+      "Arithmetic operators, expressions, integer vs float math, negative numbers",
     cards: [
       {
         id: "s2l21-1",
         front: "What are the four basic arithmetic operators in C++?",
         back: "+ addition\n- subtraction\n* multiplication\n/ division\n\nExample:\nint Result = 10 + 5;  // 15\nint Result = 10 - 5;  // 5\nint Result = 10 * 5;  // 50\nint Result = 10 / 5;  // 2",
-        tag: "Fundamentals"
+        tag: "Fundamentals",
       },
       {
         id: "s2l21-2",
         front: "What is an expression in C++?",
         back: "An operator and its operands that evaluate to a single value.\n\nExample: 10 / 5 is an expression that evaluates to 2. That result can then be assigned to a variable.\n\nint MyValue = 10 / 5; // MyValue = 2",
-        tag: "Fundamentals"
+        tag: "Fundamentals",
       },
       {
         id: "s2l21-3",
         front: "Can you use variables inside arithmetic expressions?",
         back: "Yes. Variables can be used with operators just like raw numbers, and you can mix both.\n\nint MyValue = -5;\nint MyOther = -8;\nint Result = MyValue * MyOther; // 40",
-        tag: "Fundamentals"
+        tag: "Fundamentals",
       },
       {
         id: "s2l21-4",
         front: "How do you make a number negative in C++?",
         back: "Place a minus sign directly in front of it.\n\nint MyValue = -5;\nfloat MyFloat = -3.14f;\n\nThis works with both literals and as part of expressions.",
-        tag: "Fundamentals"
+        tag: "Fundamentals",
       },
       {
         id: "s2l21-5",
         front: "What happens when you multiply two negative integers?",
         back: "The result is positive — same rule as in math.\n\nint A = -5;\nint B = -8;\nint Result = A * B; // 40 (positive)",
-        tag: "Fundamentals"
+        tag: "Fundamentals",
       },
       {
         id: "s2l21-6",
-        front: "What is the critical difference between integer division and float division?",
+        front:
+          "What is the critical difference between integer division and float division?",
         back: "Integer division truncates the decimal — you lose the fractional part.\nFloat division keeps the decimal.\n\nint:   10 / 4  = 2   (not 2.5)\nfloat: 10.0f / 4.0f = 2.5f",
-        tag: "Fundamentals"
+        tag: "Fundamentals",
       },
       {
         id: "s2l21-7",
-        front: "Why do you need to write 12.0f instead of just 12 when doing float math?",
+        front:
+          "Why do you need to write 12.0f instead of just 12 when doing float math?",
         back: "Without the .0f, C++ treats the number as an integer and performs integer math — losing the decimal. Adding .0f tells the compiler it's a float.\n\nfloat Result = 12.0f / 5.0f; // 2.4\nfloat Result = 12 / 5;       // 2 (integer math!)",
-        tag: "Fundamentals"
+        tag: "Fundamentals",
       },
       {
         id: "s2l21-8",
-        front: "What format specifier do you use to log the result of a float operation?",
-        back: "Use %f for floats.\n\nfloat MyCalc = 12.0f / 5.0f;\nUE_LOG(LogTemp, Display, TEXT(\"Result: %f\"), MyCalc);\n// prints: Result: 2.400000",
-        tag: "Logging"
-      }
-    ]
+        front:
+          "What format specifier do you use to log the result of a float operation?",
+        back: 'Use %f for floats.\n\nfloat MyCalc = 12.0f / 5.0f;\nUE_LOG(LogTemp, Display, TEXT("Result: %f"), MyCalc);\n// prints: Result: 2.400000',
+        tag: "Logging",
+      },
+    ],
   },
+  {
+    id: "s2-l22",
+    section: 2,
+    lesson: 22,
+    title: "Operator Precedence",
+    description:
+      "Order of operations, multiplication/division before addition/subtraction, using parentheses",
+    cards: [
+      {
+        id: "s2l22-1",
+        front: "What is operator precedence?",
+        back: "The rules that determine which operation in an expression is evaluated first when there are multiple operators.\n\nExample: 12.0f / 5.0f + 10.0f - 3.5f\nDivision happens first, then addition, then subtraction.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l22-2",
+        front:
+          "Which operators have higher precedence in C++ — multiplication/division or addition/subtraction?",
+        back: "Multiplication (*) and division (/) have higher precedence than addition (+) and subtraction (-).\n\nThis matches real-life math rules — PEMDAS/BODMAS applies in C++.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l22-3",
+        front:
+          "When two operators have equal precedence, in what order are they evaluated?",
+        back: "Left to right. The leftmost operation is evaluated first, then the next to the right.\n\nExample: 10.0f / 5.0f * 3.0f\nDivision happens first (left), then multiplication.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l22-4",
+        front: "How do parentheses affect operator precedence?",
+        back: "Parentheses override all other precedence rules. Whatever is inside parentheses is always evaluated first, regardless of operator type.\n\nExample:\n8.0f + (2.5f - 3.0f) * 10.0f\nThe subtraction in () runs first, then multiplication, then addition.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l22-5",
+        front:
+          "What is the evaluation order of this expression?\n\n8.0f + 2.5f - 3.0f * 10.0f",
+        back: "1. 3.0f * 10.0f = 30.0f  (multiplication first)\n2. 8.0f + 2.5f = 10.5f   (left to right)\n3. 10.5f - 30.0f = -19.5f\n\nMultiplication always runs before addition/subtraction.",
+        tag: "Fundamentals",
+      },
+      {
+        id: "s2l22-6",
+        front:
+          "Why would you use parentheses even when the default precedence would give the correct result?",
+        back: "Clarity. Parentheses make your intent explicit and easier for other developers (or future you) to read. It removes ambiguity even if the math would work out the same way.",
+        tag: "Fundamentals",
+      },
+    ],
+  },
+  
   // Add future lessons here — same structure as above.
   // Example:
   // {
