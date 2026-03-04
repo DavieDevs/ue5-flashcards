@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { getCardsForLessons } from "../data/cards";
@@ -23,7 +23,6 @@ function shuffle(arr) {
   return a;
 }
 
-// Renders a string that may contain ```code blocks``` and inline `code`
 function RenderContent({ text, isQuestion }) {
   const segments = [];
   const codeBlockRegex = /```([^`]*?)```/gs;
@@ -31,15 +30,12 @@ function RenderContent({ text, isQuestion }) {
   let match;
 
   while ((match = codeBlockRegex.exec(text)) !== null) {
-    // Text before this code block
     if (match.index > last) {
       segments.push({ type: "text", content: text.slice(last, match.index) });
     }
     segments.push({ type: "code", content: match[1].replace(/^\n/, "") });
     last = match.index + match[0].length;
   }
-
-  // Remaining text after last code block
   if (last < text.length) {
     segments.push({ type: "text", content: text.slice(last) });
   }
@@ -89,8 +85,6 @@ function RenderContent({ text, isQuestion }) {
             </div>
           );
         }
-
-        // Plain text — render inline `code` and line breaks
         return (
           <div
             key={i}
@@ -142,6 +136,46 @@ function renderInlineText(text) {
   });
 }
 
+async function gradeAnswer(question, correctAnswer, userAnswer) {
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
+    },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      messages: [
+        {
+          role: "user",
+          content: `You are grading a flashcard answer for a student learning Unreal Engine 5 C++.
+
+Question: ${question}
+
+Correct Answer: ${correctAnswer}
+
+Student's Answer: ${userAnswer}
+
+Grade leniently — if the student has the core idea right, mark it correct even if they missed minor details or used different wording. Only mark incorrect if they are clearly missing the main concept or got something factually wrong.
+
+Respond with ONLY a JSON object in this exact format (no markdown, no extra text):
+{"correct": true or false, "feedback": "One or two sentences. If correct, say what they got right. If incorrect, explain the key concept they missed."}`,
+        },
+      ],
+    }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error?.message || `API error ${response.status}`);
+  }
+  const text = data.content.map((i) => i.text || "").join("");
+  const clean = text.replace(/```json|```/g, "").trim();
+  return JSON.parse(clean);
+}
+
 export default function Study() {
   const router = useRouter();
   const [cards, setCards] = useState([]);
@@ -152,12 +186,24 @@ export default function Study() {
   const [done, setDone] = useState(false);
   const [mode, setMode] = useState("all");
 
+  const [aiMode, setAiMode] = useState(true);
+  const [userAnswer, setUserAnswer] = useState("");
+  const [grading, setGrading] = useState(false);
+  const [gradingResult, setGradingResult] = useState(null);
+  const textareaRef = useRef(null);
+
   useEffect(() => {
     if (!router.isReady) return;
     const ids = router.query.lessons?.split(",") ?? [];
     const loaded = getCardsForLessons(ids);
     setCards(shuffle(loaded));
   }, [router.isReady, router.query.lessons]);
+
+  useEffect(() => {
+    if (aiMode && textareaRef.current && !flipped) {
+      setTimeout(() => textareaRef.current?.focus(), 150);
+    }
+  }, [current, aiMode, flipped]);
 
   if (!cards.length) {
     return (
@@ -183,6 +229,8 @@ export default function Study() {
 
   const advance = () => {
     setFlipped(false);
+    setUserAnswer("");
+    setGradingResult(null);
     setTimeout(() => {
       if (current + 1 < cards.length) {
         setCurrent((c) => c + 1);
@@ -196,10 +244,37 @@ export default function Study() {
     setKnown((prev) => new Set([...prev, card.id]));
     advance();
   };
-
   const handleMiss = () => {
     setMissed((prev) => new Set([...prev, card.id]));
     advance();
+  };
+
+  const handleSubmitAnswer = async () => {
+    if (!userAnswer.trim()) return;
+    setGrading(true);
+    try {
+      const result = await gradeAnswer(card.front, card.back, userAnswer);
+      setGradingResult(result);
+    } catch (e) {
+      console.error("Grader error:", e);
+      setGradingResult({
+        correct: null,
+        feedback: `Grader error: ${e.message}`,
+      });
+    }
+    setFlipped(true);
+    setGrading(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleSubmitAnswer();
+  };
+
+  const toggleAiMode = () => {
+    setAiMode((m) => !m);
+    setUserAnswer("");
+    setGradingResult(null);
+    setFlipped(false);
   };
 
   const restartAll = () => {
@@ -210,6 +285,8 @@ export default function Study() {
     setMissed(new Set());
     setDone(false);
     setMode("all");
+    setUserAnswer("");
+    setGradingResult(null);
   };
 
   const reviewMissed = () => {
@@ -220,6 +297,8 @@ export default function Study() {
     setMissed(new Set());
     setDone(false);
     setMode("missed");
+    setUserAnswer("");
+    setGradingResult(null);
   };
 
   if (done) {
@@ -227,7 +306,6 @@ export default function Study() {
     const missedCount = missed.size;
     const pct =
       Math.round((knownCount / (knownCount + missedCount)) * 100) || 0;
-
     return (
       <div
         style={{
@@ -248,8 +326,7 @@ export default function Study() {
             top: "24px",
             left: "24px",
             fontSize: "13px",
-            color: "#8b949e",
-            fontWeight: 600,
+            color: "#484f58",
           }}
         >
           ← Back to lessons
@@ -382,6 +459,13 @@ export default function Study() {
     );
   }
 
+  const resultColor =
+    gradingResult?.correct === null
+      ? "#8b949e"
+      : gradingResult?.correct
+        ? "#22c55e"
+        : "#ff6b35";
+
   return (
     <div
       style={{
@@ -405,24 +489,46 @@ export default function Study() {
           justifyContent: "space-between",
         }}
       >
-        <Link href="/" style={{ fontSize: "13px", color: "#8b949e", fontWeight: 600 }}>
+        <Link href="/" style={{ fontSize: "13px", color: "#484f58" }}>
           ← lessons
         </Link>
-        {mode === "missed" && (
-          <span
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {mode === "missed" && (
+            <span
+              style={{
+                fontSize: "11px",
+                color: "#ff6b35",
+                background: "#ff6b3518",
+                border: "1px solid #ff6b3533",
+                padding: "3px 10px",
+                borderRadius: "20px",
+                fontWeight: 600,
+              }}
+            >
+              Review Mode
+            </span>
+          )}
+          <button
+            onClick={toggleAiMode}
             style={{
-              fontSize: "11px",
-              color: "#ff6b35",
-              background: "#ff6b3518",
-              border: "1px solid #ff6b3533",
-              padding: "3px 10px",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              background: aiMode ? "#a855f718" : "transparent",
+              border: `1px solid ${aiMode ? "#a855f755" : "#30363d"}`,
               borderRadius: "20px",
+              padding: "3px 12px",
+              color: aiMode ? "#a855f7" : "#484f58",
+              fontSize: "11px",
               fontWeight: 600,
+              fontFamily: "inherit",
+              cursor: "pointer",
+              transition: "all 0.2s",
             }}
           >
-            Review Mode
-          </span>
-        )}
+            ✦ AI {aiMode ? "On" : "Off"}
+          </button>
+        </div>
         <span style={{ fontSize: "12px", color: "#484f58" }}>
           {current + 1} / {cards.length}
         </span>
@@ -461,8 +567,9 @@ export default function Study() {
 
       {/* Card */}
       <div
-        className="study-card"
-        onClick={() => setFlipped((f) => !f)}
+        onClick={() => {
+          if (!aiMode) setFlipped((f) => !f);
+        }}
         style={{
           width: "100%",
           maxWidth: "600px",
@@ -470,7 +577,8 @@ export default function Study() {
           background: "#0d1117",
           border: `1px solid ${flipped ? tagColor + "55" : "#161b22"}`,
           borderRadius: "16px",
-          cursor: "pointer",
+          padding: "28px 32px",
+          cursor: aiMode ? "default" : "pointer",
           display: "flex",
           flexDirection: "column",
           gap: "14px",
@@ -478,7 +586,6 @@ export default function Study() {
           boxShadow: flipped ? `0 0 40px ${tagColor}15` : "none",
         }}
       >
-        {/* Tag */}
         <div
           style={{
             alignSelf: "flex-start",
@@ -494,15 +601,11 @@ export default function Study() {
         >
           {card.tag}
         </div>
-
-        {/* Lesson label */}
         {card.lessonTitle && (
           <div style={{ fontSize: "11px", color: "#30363d" }}>
             Lesson {card.lesson} · {card.lessonTitle}
           </div>
         )}
-
-        {/* Side label */}
         <div
           style={{
             fontSize: "11px",
@@ -513,16 +616,13 @@ export default function Study() {
         >
           {flipped ? "Answer" : "Question"}
         </div>
-
-        {/* Content */}
         <div style={{ flex: 1 }}>
           <RenderContent
             text={flipped ? card.back : card.front}
             isQuestion={!flipped}
           />
         </div>
-
-        {!flipped && (
+        {!flipped && !aiMode && (
           <div
             style={{
               fontSize: "11px",
@@ -536,8 +636,155 @@ export default function Study() {
         )}
       </div>
 
-      {/* Action buttons */}
-      {flipped ? (
+      {/* AI feedback banner */}
+      {flipped && gradingResult && (
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "600px",
+            background: `${resultColor}10`,
+            border: `1px solid ${resultColor}44`,
+            borderRadius: "12px",
+            padding: "14px 18px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "5px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "14px" }}>
+              {gradingResult.correct === null
+                ? "⚠"
+                : gradingResult.correct
+                  ? "✓"
+                  : "✗"}
+            </span>
+            <span
+              style={{ fontSize: "13px", fontWeight: 700, color: resultColor }}
+            >
+              {gradingResult.correct === null
+                ? "Grader unavailable"
+                : gradingResult.correct
+                  ? "Correct"
+                  : "Not quite"}
+            </span>
+          </div>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "13px",
+              color: "#8b949e",
+              lineHeight: "1.6",
+            }}
+          >
+            {gradingResult.feedback}
+          </p>
+        </div>
+      )}
+
+      {/* Bottom controls */}
+      {aiMode ? (
+        !flipped ? (
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "600px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <textarea
+              ref={textareaRef}
+              value={userAnswer}
+              onChange={(e) => setUserAnswer(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your answer... (Ctrl+Enter to submit)"
+              style={{
+                width: "100%",
+                minHeight: "110px",
+                background: "#0d1117",
+                border: "1px solid #30363d",
+                borderRadius: "12px",
+                padding: "14px 16px",
+                color: "#c9d1d9",
+                fontSize: "14px",
+                lineHeight: "1.6",
+                fontFamily: "inherit",
+                resize: "vertical",
+                boxSizing: "border-box",
+                outline: "none",
+              }}
+            />
+            <button
+              onClick={handleSubmitAnswer}
+              disabled={grading || !userAnswer.trim()}
+              style={{
+                background:
+                  grading || !userAnswer.trim()
+                    ? "#0d1117"
+                    : "linear-gradient(135deg, #00d4ff12, #a855f722)",
+                border: `1px solid ${grading || !userAnswer.trim() ? "#21262d" : "#a855f755"}`,
+                borderRadius: "12px",
+                padding: "14px",
+                color: grading || !userAnswer.trim() ? "#30363d" : "#a855f7",
+                fontWeight: 700,
+                fontSize: "14px",
+                fontFamily: "inherit",
+                cursor:
+                  grading || !userAnswer.trim() ? "not-allowed" : "pointer",
+                transition: "all 0.2s",
+              }}
+            >
+              {grading
+                ? "✦ Analysing your answer..."
+                : "✦ Submit for AI Review"}
+            </button>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              gap: "12px",
+              width: "100%",
+              maxWidth: "600px",
+            }}
+          >
+            <button
+              onClick={handleMiss}
+              style={{
+                flex: 1,
+                background: "#0d1117",
+                border: "1px solid #ff6b3555",
+                borderRadius: "12px",
+                padding: "16px",
+                color: "#ff6b35",
+                fontWeight: 700,
+                fontSize: "15px",
+                fontFamily: "inherit",
+              }}
+            >
+              ✗ Again
+            </button>
+            <button
+              onClick={handleKnow}
+              style={{
+                flex: 1,
+                background: "#0d1117",
+                border: "1px solid #22c55e55",
+                borderRadius: "12px",
+                padding: "16px",
+                color: "#22c55e",
+                fontWeight: 700,
+                fontSize: "15px",
+                fontFamily: "inherit",
+              }}
+            >
+              ✓ Got it
+            </button>
+          </div>
+        )
+      ) : flipped ? (
         <div
           style={{
             display: "flex",
